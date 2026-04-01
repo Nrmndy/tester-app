@@ -24,8 +24,8 @@ private:
     domain::Cable currentCable;
 
     // Параметры отрисовки
-    static constexpr int CONTACT_RADIUS = 8;
-    static constexpr int VERTICAL_SPACING = 60;
+    static constexpr int CONTACT_RADIUS = 4;
+    static constexpr int VERTICAL_SPACING = 40;
     static constexpr int HORIZONTAL_OFFSET = 100;
 };
 

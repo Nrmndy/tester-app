@@ -57,7 +57,7 @@ void CableViewer::drawCable()
             QPen(Qt::black), QBrush(Qt::blue));
 
         auto fromPinText = scene->addText(QString::number(fromPin));
-        fromPinText->setPos(-30, yPos - 5);
+        fromPinText->setPos(-30, yPos - 12); // 12 - полтора радиуса контакта
         fromPinText->setDefaultTextColor(Qt::black);
 
         // Рисуем соединения TO
@@ -72,18 +72,30 @@ void CableViewer::drawCable()
                 QPen(Qt::black), QBrush(Qt::green));
 
             auto toPinText = scene->addText(QString::number(toPin));
-            toPinText->setPos(HORIZONTAL_OFFSET + 10, targetY - 5);
+            toPinText->setPos(HORIZONTAL_OFFSET + 10, targetY - 12);
             toPinText->setDefaultTextColor(Qt::black);
 
-            if (j > 0)
+            // Если адресов больше одного, то рисуем цепи ветвления с точками-соединениями
+            if (j > 0) {
+                auto x_connection_point = HORIZONTAL_OFFSET / 2 + CONTACT_RADIUS / 2;
+                auto y_connection_point = yPos + VERTICAL_SPACING * (j - 1) - CONTACT_RADIUS / 2;
 
-            scene->addEllipse(
-                HORIZONTAL_OFFSET / 2, yPos - CONTACT_RADIUS,
-                CONTACT_RADIUS, CONTACT_RADIUS,
-                QPen(Qt::red), QBrush(Qt::red));
+                scene->addEllipse(
+                    HORIZONTAL_OFFSET / 2, y_connection_point,
+                    CONTACT_RADIUS, CONTACT_RADIUS,
+                    QPen(Qt::red), QBrush(Qt::red));
 
-            // Линия соединения
-            scene->addLine(0, yPos, HORIZONTAL_OFFSET, targetY, QPen(Qt::red, 2));
+                scene->addLine(x_connection_point, y_connection_point + CONTACT_RADIUS / 2,
+                               x_connection_point, y_connection_point + CONTACT_RADIUS / 2 + VERTICAL_SPACING,
+                               QPen(Qt::red, 2));
+
+                scene->addLine(x_connection_point, y_connection_point + CONTACT_RADIUS / 2 + VERTICAL_SPACING,
+                               HORIZONTAL_OFFSET, targetY,
+                               QPen(Qt::red, 2));
+            } else {
+                // Линия соединения
+                scene->addLine(0, yPos, HORIZONTAL_OFFSET, targetY, QPen(Qt::red, 2));
+            }
         }
 
         yPos += VERTICAL_SPACING * (toPins->size() + 1);

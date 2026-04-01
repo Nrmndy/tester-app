@@ -35,12 +35,9 @@ void MainWindow::openFile()
     cable_ = util::ConfigFileParser::parseWireFile(fileName);
 
     if (cable_) {
-        QMessageBox::information(this, "Успех",
-                                 QString("Выбран файл: %1 \n Строк: %2 \n Цепей: %3")
-                                     .arg(fileName)
-                                     .arg(cable_->GetConnectionsCount())
-                                     .arg(cable_->GetCircuitsCount())
-                                 );
+        ui->lbl_file_name->setText(fileName);
+        ui->lbl_connections_value->setText(QString::number(cable_->GetConnectionsCount()));
+        ui->lbl_circuits_value->setText(QString::number(cable_->GetCircuitsCount()));
     } else {
         QMessageBox::critical(this, "Ошибка", "Не удалось открыть или обработать файл");
     }
